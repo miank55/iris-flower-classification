@@ -1,0 +1,669 @@
+/* ==========================================================================
+   style.css — Iris Flower Classification
+   ==========================================================================
+   Table of contents:
+   1. Custom properties (design tokens)
+   2. Reset & base
+   3. Typography
+   4. Layout helpers
+   5. Hero header
+   6. Alert banners
+   7. Cards
+   8. Prediction form
+   9. Example values
+   10. Result card
+   11. Probability bars
+   12. Footer
+   13. Animations & transitions
+   14. Responsive (≤ 600 px)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Custom properties
+   -------------------------------------------------------------------------- */
+:root {
+  /* Colour palette */
+  --color-bg-start:        #4f46e5;   /* deep indigo */
+  --color-bg-mid:          #7c3aed;   /* violet */
+  --color-bg-end:          #06b6d4;   /* cyan / teal */
+
+  --color-card-bg:         #ffffff;
+  --color-card-border:     rgba(255, 255, 255, 0.25);
+
+  --color-text-primary:    #1e1b4b;
+  --color-text-secondary:  #6b7280;
+  --color-text-hint:       #9ca3af;
+  --color-text-on-dark:    #ffffff;
+
+  --color-input-border:    #d1d5db;
+  --color-input-focus:     #7c3aed;
+  --color-input-bg:        #f9fafb;
+
+  --color-btn-start:       #7c3aed;
+  --color-btn-end:         #06b6d4;
+  --color-btn-hover-start: #6d28d9;
+  --color-btn-hover-end:   #0891b2;
+
+  /* Species colours */
+  --color-setosa:          #f472b6;   /* pink */
+  --color-setosa-light:    #fdf2f8;
+  --color-versicolor:      #60a5fa;   /* blue */
+  --color-versicolor-light:#eff6ff;
+  --color-virginica:       #a78bfa;   /* purple */
+  --color-virginica-light: #f5f3ff;
+
+  /* Alert colours */
+  --color-warning-bg:      #fffbeb;
+  --color-warning-border:  #f59e0b;
+  --color-warning-text:    #92400e;
+  --color-error-bg:        #fef2f2;
+  --color-error-border:    #ef4444;
+  --color-error-text:      #991b1b;
+
+  /* Spacing */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 50px;
+
+  /* Shadows */
+  --shadow-card: 0 20px 60px rgba(79, 70, 229, 0.18),
+                 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-btn:  0 4px 15px rgba(124, 58, 237, 0.35);
+  --shadow-btn-hover: 0 8px 25px rgba(124, 58, 237, 0.55);
+
+  /* Transitions */
+  --transition-fast:   all 0.15s ease;
+  --transition-normal: all 0.3s ease;
+  --transition-slow:   all 0.5s ease;
+
+  /* Max width */
+  --max-width: 1000px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-start) 0%,
+    var(--color-bg-mid)   50%,
+    var(--color-bg-end)   100%
+  );
+  min-height: 100vh;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   3. Typography
+   -------------------------------------------------------------------------- */
+h1 { font-size: 2.5rem;  font-weight: 700; line-height: 1.2; }
+h2 { font-size: 1.4rem;  font-weight: 600; line-height: 1.3; }
+h3 { font-size: 1rem;    font-weight: 600; }
+
+code {
+  font-family: 'Courier New', monospace;
+  background: rgba(0,0,0,0.06);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+
+a {
+  color: var(--color-input-focus);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   4. Layout helpers
+   -------------------------------------------------------------------------- */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+  margin-top: var(--space-xl);
+}
+
+/* --------------------------------------------------------------------------
+   5. Hero header
+   -------------------------------------------------------------------------- */
+.hero {
+  text-align: center;
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  color: var(--color-text-on-dark);
+}
+
+.hero__icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-sm);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+}
+
+.hero__title {
+  color: var(--color-text-on-dark);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  margin-bottom: var(--space-sm);
+}
+
+.hero__subtitle {
+  font-size: 1.1rem;
+  font-weight: 300;
+  opacity: 0.9;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   6. Alert banners
+   -------------------------------------------------------------------------- */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid;
+  margin-bottom: var(--space-lg);
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alert--warning {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-text);
+}
+
+.alert--error {
+  background-color: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
+}
+
+.alert__icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.alert__body {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   7. Cards
+   -------------------------------------------------------------------------- */
+.card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-xl);
+  border: 1px solid var(--color-card-border);
+}
+
+.card__title {
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.card__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-lg);
+}
+
+/* --------------------------------------------------------------------------
+   8. Prediction form
+   -------------------------------------------------------------------------- */
+.prediction-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.form-hint {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--color-text-hint);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 2px solid var(--color-input-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  transition: var(--transition-normal);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-input-focus);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+.form-input:hover:not(:focus) {
+  border-color: #a78bfa;
+}
+
+/* Remove number input spinners for cleaner look */
+.form-input[type="number"]::-webkit-inner-spin-button,
+.form-input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.4;
+}
+
+/* Predict button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-normal);
+}
+
+.btn--predict {
+  width: 100%;
+  padding: 0.85rem var(--space-xl);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    135deg,
+    var(--color-btn-start),
+    var(--color-btn-end)
+  );
+  color: #ffffff;
+  box-shadow: var(--shadow-btn);
+  margin-top: var(--space-sm);
+  letter-spacing: 0.02em;
+}
+
+.btn--predict:hover {
+  background: linear-gradient(
+    135deg,
+    var(--color-btn-hover-start),
+    var(--color-btn-hover-end)
+  );
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.btn--predict:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-btn);
+}
+
+.btn--predict:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.6);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   9. Example values
+   -------------------------------------------------------------------------- */
+.examples {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid #f3f4f6;
+}
+
+.examples__title {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.examples__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.example-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid;
+  font-size: 0.85rem;
+}
+
+.example-item--setosa {
+  background: var(--color-setosa-light);
+  border-color: var(--color-setosa);
+}
+
+.example-item--versicolor {
+  background: var(--color-versicolor-light);
+  border-color: var(--color-versicolor);
+}
+
+.example-item--virginica {
+  background: var(--color-virginica-light);
+  border-color: var(--color-virginica);
+}
+
+.example-item__species {
+  font-weight: 600;
+  font-style: italic;
+}
+
+.example-item--setosa    .example-item__species { color: #be185d; }
+.example-item--versicolor .example-item__species { color: #1d4ed8; }
+.example-item--virginica  .example-item__species { color: #6d28d9; }
+
+.example-item__values {
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.examples__order {
+  font-size: 0.78rem;
+  color: var(--color-text-hint);
+  margin-top: var(--space-sm);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   10. Result card
+   -------------------------------------------------------------------------- */
+.result-card {
+  /* Animation applied via .fade-in */
+}
+
+.result__species-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.result__species-badge--setosa {
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border: 2px solid var(--color-setosa);
+}
+
+.result__species-badge--versicolor {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid var(--color-versicolor);
+}
+
+.result__species-badge--virginica {
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+  border: 2px solid var(--color-virginica);
+}
+
+.result__species-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.result__species-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.result__species-badge--setosa    .result__species-name { color: #9d174d; }
+.result__species-badge--versicolor .result__species-name { color: #1e40af; }
+.result__species-badge--virginica  .result__species-name { color: #5b21b6; }
+
+/* Confidence score */
+.result__confidence {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  border-radius: var(--radius-sm);
+  padding: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.result__confidence-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.result__confidence-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   11. Probability bars
+   -------------------------------------------------------------------------- */
+.result__probabilities {
+  margin-top: var(--space-md);
+}
+
+.result__prob-title {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.prob-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 56px;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.prob-row__label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.prob-row__label--setosa     { color: #be185d; }
+.prob-row__label--versicolor { color: #1d4ed8; }
+.prob-row__label--virginica  { color: #6d28d9; }
+
+.prob-row__bar-track {
+  background: #f3f4f6;
+  border-radius: var(--radius-pill);
+  height: 12px;
+  overflow: hidden;
+}
+
+.prob-row__bar {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px;
+}
+
+.prob-row__bar--setosa {
+  background: linear-gradient(90deg, #f9a8d4, var(--color-setosa));
+}
+
+.prob-row__bar--versicolor {
+  background: linear-gradient(90deg, #93c5fd, var(--color-versicolor));
+}
+
+.prob-row__bar--virginica {
+  background: linear-gradient(90deg, #c4b5fd, var(--color-virginica));
+}
+
+.prob-row__pct {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   12. Footer
+   -------------------------------------------------------------------------- */
+.footer {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md) var(--space-md);
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.88rem;
+}
+
+.footer__link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: underline dotted;
+}
+
+.footer__link:hover {
+  color: #ffffff;
+  text-decoration: underline solid;
+}
+
+/* --------------------------------------------------------------------------
+   13. Animations & transitions
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.55s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert {
+  animation: slideDown 0.3s ease forwards;
+}
+
+/* --------------------------------------------------------------------------
+   14. Responsive — 600 px breakpoint
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  :root {
+    --space-xl: 1.25rem;
+    --space-2xl: 2rem;
+  }
+
+  h1 { font-size: 1.75rem; }
+
+  .page-wrapper {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .prob-row {
+    grid-template-columns: 120px 1fr 48px;
+  }
+
+  .result__species-name {
+    font-size: 1.3rem;
+  }
+
+  .result__confidence-value {
+    font-size: 1.5rem;
+  }
+
+  .example-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+}
+
+@media (max-width: 400px) {
+  .prob-row {
+    grid-template-columns: 100px 1fr 42px;
+    font-size: 0.78rem;
+  }
+}

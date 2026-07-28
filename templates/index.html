@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Classify Iris flowers into Setosa, Versicolor, or Virginica using a machine learning model trained on the classic Iris dataset." />
+  <title>Iris Flower Classification</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Application stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+
+<body>
+  <div class="page-wrapper">
+
+    <!-- ================================================================ -->
+    <!-- Hero Header                                                        -->
+    <!-- ================================================================ -->
+    <header class="hero" role="banner">
+      <div class="hero__icon" aria-hidden="true">🌸</div>
+      <h1 class="hero__title">Iris Flower Classification</h1>
+      <p class="hero__subtitle">
+        Enter four measurements and our ML model will identify the Iris species.
+      </p>
+    </header>
+
+    <main class="main-content">
+
+      <!-- ============================================================== -->
+      <!-- Model-missing banner                                             -->
+      <!-- ============================================================== -->
+      {% if model_missing %}
+      <div class="alert alert--warning" role="alert" aria-live="polite">
+        <span class="alert__icon" aria-hidden="true">⚠️</span>
+        <div class="alert__body">
+          <strong>Model not found.</strong>
+          Please run <code>python train_model.py</code> in your terminal to
+          train and save the model, then restart the application.
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- ============================================================== -->
+      <!-- Error banner                                                     -->
+      <!-- ============================================================== -->
+      {% if error %}
+      <div class="alert alert--error" role="alert" aria-live="assertive">
+        <span class="alert__icon" aria-hidden="true">❌</span>
+        <div class="alert__body">
+          <strong>Error:</strong> {{ error }}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="content-grid">
+
+        <!-- ============================================================ -->
+        <!-- Prediction Form Card                                           -->
+        <!-- ============================================================ -->
+        <section class="card form-card" aria-labelledby="form-heading">
+          <h2 class="card__title" id="form-heading">Enter Flower Measurements</h2>
+          <p class="card__subtitle">All measurements are in centimetres (cm).</p>
+
+          <form
+            action="/predict"
+            method="POST"
+            class="prediction-form"
+            aria-label="Iris flower measurement form"
+            novalidate
+          >
+
+            <!-- Sepal Length -->
+            <div class="form-group">
+              <label class="form-label" for="sepal_length">
+                Sepal Length (cm)
+                <span class="form-hint">Typical range: 4.3 – 7.9 cm</span>
+              </label>
+              <input
+                type="number"
+                id="sepal_length"
+                name="sepal_length"
+                class="form-input"
+                step="0.1"
+                min="0"
+                max="30"
+                placeholder="e.g. 5.1"
+                aria-describedby="sepal_length_hint"
+                required
+              />
+            </div>
+
+            <!-- Sepal Width -->
+            <div class="form-group">
+              <label class="form-label" for="sepal_width">
+                Sepal Width (cm)
+                <span class="form-hint">Typical range: 2.0 – 4.4 cm</span>
+              </label>
+              <input
+                type="number"
+                id="sepal_width"
+                name="sepal_width"
+                class="form-input"
+                step="0.1"
+                min="0"
+                max="30"
+                placeholder="e.g. 3.5"
+                aria-describedby="sepal_width_hint"
+                required
+              />
+            </div>
+
+            <!-- Petal Length -->
+            <div class="form-group">
+              <label class="form-label" for="petal_length">
+                Petal Length (cm)
+                <span class="form-hint">Typical range: 1.0 – 6.9 cm</span>
+              </label>
+              <input
+                type="number"
+                id="petal_length"
+                name="petal_length"
+                class="form-input"
+                step="0.1"
+                min="0"
+                max="30"
+                placeholder="e.g. 1.4"
+                aria-describedby="petal_length_hint"
+                required
+              />
+            </div>
+
+            <!-- Petal Width -->
+            <div class="form-group">
+              <label class="form-label" for="petal_width">
+                Petal Width (cm)
+                <span class="form-hint">Typical range: 0.1 – 2.5 cm</span>
+              </label>
+              <input
+                type="number"
+                id="petal_width"
+                name="petal_width"
+                class="form-input"
+                step="0.1"
+                min="0"
+                max="30"
+                placeholder="e.g. 0.2"
+                aria-describedby="petal_width_hint"
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn--predict"
+              aria-label="Submit measurements and classify the Iris species"
+            >
+              🔍 Predict Species
+            </button>
+          </form>
+
+          <!-- ---------------------------------------------------------- -->
+          <!-- Example values helper                                         -->
+          <!-- ---------------------------------------------------------- -->
+          <aside class="examples" aria-label="Example measurement values">
+            <h3 class="examples__title">💡 Try these example values</h3>
+            <div class="examples__grid">
+              <div class="example-item example-item--setosa">
+                <span class="example-item__species">Iris setosa</span>
+                <span class="example-item__values">5.1 · 3.5 · 1.4 · 0.2</span>
+              </div>
+              <div class="example-item example-item--versicolor">
+                <span class="example-item__species">Iris versicolor</span>
+                <span class="example-item__values">6.4 · 3.2 · 4.5 · 1.5</span>
+              </div>
+              <div class="example-item example-item--virginica">
+                <span class="example-item__species">Iris virginica</span>
+                <span class="example-item__values">6.3 · 3.3 · 6.0 · 2.5</span>
+              </div>
+            </div>
+            <p class="examples__order">
+              Order: <em>Sepal L · Sepal W · Petal L · Petal W</em>
+            </p>
+          </aside>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- Result Card                                                     -->
+        <!-- ============================================================ -->
+        {% if species %}
+        <section
+          class="card result-card fade-in"
+          aria-labelledby="result-heading"
+          aria-live="polite"
+        >
+          <h2 class="card__title" id="result-heading">Classification Result</h2>
+
+          <!-- Species name badge -->
+          <div class="result__species-badge result__species-badge--{{ species | lower | replace('-', '') | replace('iris', '') | trim }}">
+            <span class="result__species-icon" aria-hidden="true">
+              {% if "setosa" in species | lower %}🌷
+              {% elif "versicolor" in species | lower %}🌼
+              {% else %}🌺
+              {% endif %}
+            </span>
+            <span class="result__species-name">{{ species }}</span>
+          </div>
+
+          <!-- Confidence score -->
+          <div class="result__confidence">
+            <span class="result__confidence-label">Confidence</span>
+            <span class="result__confidence-value">{{ confidence }}%</span>
+          </div>
+
+          <!-- Probability bars -->
+          <div class="result__probabilities" aria-label="Class probabilities">
+            <h3 class="result__prob-title">Class Probabilities</h3>
+
+            {% for sp_name, prob in probabilities.items() %}
+            {% set pct = (prob * 100) | round(2) %}
+            <div class="prob-row">
+              <span
+                class="prob-row__label prob-row__label--{{ sp_name | lower | replace('-', '') | replace('iris', '') | trim }}"
+                aria-label="{{ sp_name }}"
+              >{{ sp_name }}</span>
+              <div
+                class="prob-row__bar-track"
+                role="progressbar"
+                aria-valuenow="{{ pct }}"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="{{ sp_name }} probability {{ pct }}%"
+              >
+                <div
+                  class="prob-row__bar prob-row__bar--{{ sp_name | lower | replace('-', '') | replace('iris', '') | trim }}"
+                  style="width: {{ pct }}%;"
+                ></div>
+              </div>
+              <span class="prob-row__pct">{{ pct }}%</span>
+            </div>
+            {% endfor %}
+          </div>
+
+        </section>
+        {% endif %}
+
+      </div><!-- /.content-grid -->
+
+    </main>
+
+    <!-- ================================================================ -->
+    <!-- Footer                                                             -->
+    <!-- ================================================================ -->
+    <footer class="footer" role="contentinfo">
+      <p>
+        Built with 🐍 Python · Flask · scikit-learn &nbsp;|&nbsp;
+        Dataset: <a
+          href="https://archive.ics.uci.edu/dataset/53/iris"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer__link"
+        >UCI Iris Dataset</a>
+      </p>
+    </footer>
+
+  </div><!-- /.page-wrapper -->
+</body>
+</html>
