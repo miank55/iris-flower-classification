@@ -42,8 +42,7 @@
         <span class="alert__icon" aria-hidden="true">⚠️</span>
         <div class="alert__body">
           <strong>Model not found.</strong>
-          Please run <code>python train_model.py</code> in your terminal to
-          train and save the model, then restart the application.
+          Please run <code>python train_model.py</code> in your terminal to train and save the model, then restart the application.<br><small>{{ model_error or '' }}</small>
         </div>
       </div>
       {% endif %}
@@ -87,6 +86,7 @@
                 type="number"
                 id="sepal_length"
                 name="sepal_length"
+                value="{{ submitted_values.sepal_length if submitted_values else '' }}"
                 class="form-input"
                 step="0.1"
                 min="0"
@@ -107,6 +107,7 @@
                 type="number"
                 id="sepal_width"
                 name="sepal_width"
+                value="{{ submitted_values.sepal_width if submitted_values else '' }}"
                 class="form-input"
                 step="0.1"
                 min="0"
@@ -127,6 +128,7 @@
                 type="number"
                 id="petal_length"
                 name="petal_length"
+                value="{{ submitted_values.petal_length if submitted_values else '' }}"
                 class="form-input"
                 step="0.1"
                 min="0"
@@ -147,6 +149,7 @@
                 type="number"
                 id="petal_width"
                 name="petal_width"
+                value="{{ submitted_values.petal_width if submitted_values else '' }}"
                 class="form-input"
                 step="0.1"
                 min="0"
