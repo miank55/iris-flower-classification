@@ -92,19 +92,19 @@ def predict():
             return render_template(
                 "index.html", model_missing=False,
                 error=f"Please enter a value for {field.replace('_', ' ')}."
-            ), 400
+            )
         try:
             value = float(raw)
         except ValueError:
             return render_template(
                 "index.html", model_missing=False,
                 error=f"{field.replace('_', ' ').capitalize()} must be a number."
-            ), 400
+            )
         if not np.isfinite(value) or value <= 0 or value > 30:
             return render_template(
                 "index.html", model_missing=False,
                 error="Measurements must be finite, greater than 0 and at most 30 cm."
-            ), 400
+            )
         values.append(value)
 
     result = classify(values)
