@@ -127,7 +127,7 @@
         <div class="probability-block">
           <h3>Class probability breakdown</h3>
           {% for sp_name, prob in probabilities.items() %}
-          {% set pct = (prob * 100) | round(2) %}
+          {% set pct = prob | round(2) %}
           {% set sp_lower = sp_name | lower %}
           {% if 'setosa' in sp_lower %}{% set bar_class = 'setosa' %}{% elif 'versicolor' in sp_lower %}{% set bar_class = 'versicolor' %}{% else %}{% set bar_class = 'virginica' %}{% endif %}
           <div class="probability-row">
